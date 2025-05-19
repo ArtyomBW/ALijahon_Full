@@ -1,0 +1,110 @@
+data types  : str , list , tuple , dict , bool , set , int , float
+list , tuple : tezligi va hotiradagi joyi
+unpacking , packing : a = 1,2,3 | a,b,c = [1,2,3] | *args | **kwargs | * , **
+    def tmp(*args , **kwargs):
+        pass
+
+    l = [1,2,3]
+    tmp(*l)
+
+
+
+mutable , immutable: mutable(list , dict , set) , immutable(tuple , float , int , str , complex)
+collections, itertools : tezlikga qaratilgan methodlar to'plami ! Leetcode
+os : Path , mkdir , touch , delete -> dir , file
+list, dict, set -> comprehension : [i for i in range(1,10)] , {i for i in range(1,10)} , {i:i for i in range(1,10)}
+function, lambda -> def tmp(a, b): , lambda a , b: logic
+    # lambda + comprehension + val if con else val + map() , filter()
+    # def tmp(a,/,*,b):
+    #     pass
+    # tmp(1 , b=4)
+
+scope : global , local , nested local
+dataclasses : __init__ , __repr__ auto build!
+OOP principles :
+    class  - object yaratish uchun structure
+    object(method , attr) - malumotlar bilan onson ishlash
+    inheritance - single , hybrid , hirarchical , multiple , multilevel
+    abstraction - classlar uchun interface! classlarga hizmat qiladigan class hisoblanadi !
+    polymorphism - python(dynamic) ,
+    encapsulation
+range(10,20) # *args
+slots : class ni attr larini static qiladi! Static bo'lgan code tezroq ishlidi
+dunder methods == magic methods -> __init__ , __repr__ , __str__ , __add__, .... __mul__
+
+(Threads(IO tasklar uchun)/multiprocessing(IO tasklar uchun))Async
+python + async
+concurrency/parallelism
+Gil - global interpret lock
+
+logging -> project haqida informatsiya yigi'shi vazifasi
+Postgres -> database!
+    subquery -> query(query)
+    group by -> guruhlashda urg'u ko'rsatilgan ustunga qaridi
+    all(True , True , True) , any(True , True , True)      ->
+    join -> 1 nechta table ustun malumotlari kerak bo'lganda ishlatamiz
+
+
+
+transaction
+    atomic transaction: begin; rollback , commit
+
+view -> a = query
+
+trigger -> signal
+partition + index
+pl/pgsql
+index ,  enum()
+
+
+
+
+sqlite       file database
+postgresql   service
+MySql        service
+
+
+
+cashing -> RAM
+redis == cashing
+redis -> service
+
+data -> redis(ttl , expire time) -> cashing == RAM
+data -> rabbitMQ(ttl , expire time) -> cashing == RAM
+memory use in python:
+    memory management:
+
+
+
+
+
+a = 10
+print(a)
+b = 10
+garbage collector,reference count
+web protocol
+
+http methods
+
+==================================================
+
+how works web
+websocket
+graphql -> API product CRUD
+cron -> time management
+
+Big O notation
+sorts (merge, quick, bubble, insert, select)
+search (linear, binary)
+
+context manager (custom), generator, decorator, iterator,
+ci/cd, kanban
+celery, redis, rabbitmq, elasticsearch
+
+design patterns
+OOP/SOLID/YAGNI/KISS/DRY
+PUT with Patch
+Web Scraping
+Sql/NoSql
+
+

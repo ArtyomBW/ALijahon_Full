@@ -79,6 +79,11 @@ class District(Model):
     region = ForeignKey("apps.Region", CASCADE, related_name="districts")
 
 class User(AbstractUser):
+    class RoleType(TextChoices):
+        SELLER = 'seller' , "Seller"
+        OPERATOR = 'operator' , "Operator"
+        ADMIN = 'admin' , "Admin"
+        DELIVER = 'deliver' , "Deliver"
     phone_number = CharField(max_length=15, unique=True)
     objects = CustomUserManager()
     username = None
@@ -90,6 +95,8 @@ class User(AbstractUser):
     address = CharField(max_length=255, blank=True, null=True)
     telegram_id = CharField(max_length=30, blank=True, null=True)
     about = TextField(blank=True, null=True)
+    balance = DecimalField(max_digits=10 , decimal_places=0 , default=0)
+    role = CharField(max_length=50 , choices=RoleType , default=RoleType.SELLER)
 
     @property
     def wishlist_products(self):
@@ -136,7 +143,8 @@ class Order(Model):
         CANCELED = "canceled" , "Canceled"
 
 
-    owner = ForeignKey('apps.User' , SET_NULL ,related_name='orders', null=True , blank=True)
+    owner = ForeignKey('apps.User' , SET_NULL ,related_name='owner_orders', null=True , blank=True)
+    operator = ForeignKey('apps.User' , SET_NULL ,related_name='operator_orders', null=True , blank=True)
     product = ForeignKey('apps.Product' , SET_NULL , related_name='orders', null=True , blank=True)
     phone_number = CharField(max_length=20)
     first_name = CharField(max_length=255)
@@ -144,6 +152,7 @@ class Order(Model):
     status = CharField(max_length=255 , choices=StatusType , default=StatusType.NEW)
     quantity = PositiveIntegerField(default=1)
     total = DecimalField(max_digits=9 , decimal_places=0)
+    comment = TextField(null=True)
     thread = ForeignKey('apps.Thread' , SET_NULL , related_name='orders' , null=True , blank=True)
     created_at = DateTimeField(auto_now_add=True)
 
@@ -172,6 +181,28 @@ class AdminSetting(Model):
     competition_description = RichTextUploadingField(null=True , blank=True)
     start_competition = DateField(null=True , blank=True)
     end_competition = DateField(null=True , blank=True)
+
+class Payment(Model):
+    class StatusPayType(TextChoices):
+        CANCELED = 'canceled' , 'Canceled'
+        UNDER_VIEW = 'under view' , 'Under View'
+        COMPLETED = 'completed' , 'Completed'
+
+    card_number = CharField(max_length=16)
+    pay_amount = DecimalField(max_digits=9 , decimal_places=0)
+    pay_status = CharField(choices=StatusPayType,  default=StatusPayType.UNDER_VIEW)
+    owner = ForeignKey('apps.User' , SET_NULL , related_name='payments',null=True , blank=True)
+    message = TextField(null=True , blank=True)
+    receipt = ImageField(upload_to='payment/' , null=True , blank=True)
+    created_at = DateTimeField(auto_now_add=True)
+    update_at = DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.card_number
+
+
+
+
 
 
 

@@ -54,3 +54,7 @@ class OrderListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         query = super().get_queryset()
         return query.filter(owner=self.request.user)
+
+
+class RequestTemplateView(TemplateView):
+    template_name = 'apps/order/requests.html'

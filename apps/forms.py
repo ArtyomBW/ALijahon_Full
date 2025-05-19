@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.forms import Form, ModelForm
 from django.forms.fields import CharField
 
-from apps.models import User, Order, AdminSetting, Thread, Product
+from apps.models import User, Order, AdminSetting, Thread, Product, Payment
 
 
 class AuthForm(Form):
@@ -96,3 +96,17 @@ class ThreadModelForm(ModelForm):
         product_id = self.data.get('product')
         return Product.objects.filter(id=product_id).first()
 
+
+
+class PaymentModelForm(ModelForm):
+    class Meta:
+        model = Payment
+        fields = 'card_number' , 'pay_amount' , 'owner'
+
+    def clean_pay_amount(self):
+        owner_id = self.data.get('owner')
+        pay_amount = self.cleaned_data.get('pay_amount')
+        owner = User.objects.get(pk=owner_id)
+        if owner.balance < pay_amount:
+            raise ValidationError(f"Balance da pul yetarli emas")
+        return pay_amount
