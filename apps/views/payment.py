@@ -15,6 +15,12 @@ class PaymentCreateView(CreateView):
         data = super().get_context_data(**kwargs)
         data['payments'] = Payment.objects.filter(owner=self.request.user).order_by('-created_at')
         return data
+    def form_valid(self, form):
+        owner = form.cleaned_data.get("owner")
+        owner.balance -= form.cleaned_data.get('pay_amount')
+        owner.save()
+        return super().form_valid(form)
+
     def form_invalid(self, form):
         for error in form.errors.values():
             messages.error(self.request, error)

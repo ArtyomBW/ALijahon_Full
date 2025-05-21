@@ -29,6 +29,16 @@ class UserAdmin(admin.ModelAdmin):
 class PaymentAdmin(admin.ModelAdmin):
     list_display = 'card_number' , 'pay_amount' , 'pay_status' , 'receipt'
 
+    def save_model(self, request, obj, form, change):
+        data = form.cleaned_data
+        if change and data.get('pay_status') == Payment.StatusPayType.CANCELED.value:
+            owner = data.get("owner")
+            owner.balance += data.get("pay_amount")
+            owner.save()
+        return super().save_model(request, obj, form, change)
+
+
+
 
 
 

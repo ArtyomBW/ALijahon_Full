@@ -797,11 +797,11 @@
                                     Profil
                                     </a>
                                     {% if request.user.role == 'operator' %}
-                                    	<a class="dropdown-item header_navbar_lang_menu_dropdown_item" href="{% url 'operator' %}">
+                                    	<a class="dropdown-item header_navbar_lang_menu_dropdown_item" href="{% url 'operator' %}?status=new">
                                         Operator Panel
                                     </a>
                                         {% elif request.user.role == 'deliver' %}
-                                        <a class="dropdown-item header_navbar_lang_menu_dropdown_item" href="{% url "profile" request.user.pk %}">
+                                        <a class="dropdown-item header_navbar_lang_menu_dropdown_item" href="{% url "operator" %}">
                                     Deliver Panel
                                     </a>
                                     {% endif %}

@@ -103,15 +103,15 @@
             <div class="col-md-6 mb-3">
                 <label for="quantity" class="form-label required-label"><strong>{% trans "Nechta:" %}</strong></label>
                 <input id="quantity" class="form-select"  name="quantity" required type="number" max="100" min="1"
-                       value="1">
+                       value="{{ order.quantity }}">
 
             </div>
 
             <div class="col-md-6 mb-3">
                 <label for="delivering_time"
                        class="form-label required-label"><strong>{% trans "Yuborish vaqti" %}:</strong></label>
-                <input type="date" class="form-control" name="send_date" id="delivering_time"
-                       value="{{ order.send_date|date:'Y-m-d' }}">
+                <input type="date" class="form-control" name="deliver_time" id="delivering_time"
+                       value="{{ order.deliver_time|date:'Y-m-d' }}">
 
             </div>
         </div>
@@ -150,23 +150,23 @@
             <div class="col-md-6 mb-3">
                 <label for="quantity" class="form-label "><strong>{% trans "Nechta:" %}</strong></label>
                 <input disabled id="quantity" class="form-select"   name="quantity" type="number" max="100" min="1"
-                       value="1">
+                       value="{{ order.quantity }}">
 
             </div>
 
             <div class="col-md-6 mb-3">
                 <label for="delivering_time"
                        class="form-label "><strong>{% trans "Yuborish vaqti" %}:</strong></label>
-                <input disabled type="date" class="form-control" name="send_date" id="delivering_time"
-                       value="{{ order.send_date|date:'Y-m-d' }}">
+                <input readonly type="date" class="form-control" name="deliver_time" id="delivering_time"
+                       value="{{ order.deliver_time|date:'Y-m-d' }}">
 
             </div>
         </div>
              <div class="row form-section">
             <div class="col-md-6 mb-3">
                 <label for="region">{% trans "Viloyat" %}</label>
-                <select disabled class="form-control" id="id_region">
-                    {% if order.district %}
+                <select readonly class="form-control" id="id_region">
+                    {% if  order.district %}
                         <option value="" disabled selected>{{ order.district.region.name }}</option>
                     {% else %}
                         <option value="" disabled selected>{% trans "Viloyat tanlang" %}</option>
@@ -183,7 +183,7 @@
 
             <div class="col-md-6 mb-3">
                 <label for="district_id">{% trans "Viloyat" %}</label>
-                <select disabled name="district" class="form-control" id="id_district">
+                <select readonly name="district" class="form-control" id="id_district">
                     <option value="" selected disabled>{% trans "Tuman tanlang" %}</option>
                     {% if order.district.id %}
                         <option value="{{ order.district.id }}" selected>{{ order.district.name }}</option>
@@ -209,7 +209,7 @@
                             type="radio"
                             name="status"
                             id="delivering_order"
-                            value="{{ order.StatusType.DELIVERING }}"
+                            value="{{ order.StatusType.DELIVERING.value }}"
                             {% if order.status == order.StatusType.DELIVERING %} checked {% endif %}
                             required
                     >
@@ -227,7 +227,7 @@
                             type="radio"
                             name="status"
                             id="delivered_order"
-                            value="{{ order.StatusType.DELIVERED }}"
+                            value="{{ order.StatusType.DELIVERED.value }}"
                             {% if order.status == order.StatusType.DELIVERED %} checked {% endif %}
                             required
                     >
@@ -244,7 +244,7 @@
                             type="radio"
                             name="status"
                             id="delivered_order"
-                            value="{{ order.StatusType.COMPLETED }}"
+                            value="{{ order.StatusType.COMPLETED.value }}"
                             {% if order.status == order.StatusType.COMPLETED %} checked {% endif %}
                             required
                     >
@@ -260,8 +260,8 @@
             <div class="mb-3">
                 <div class="form-check">
                     <input class="form-check-input" type="radio"  name="status" id="new_order"
-                           value="{{ order.StatusType.NEW }}"{% if order.status == order.StatusType.NEW %}
-                           checked {% endif %}required>
+                           value="{{ order.StatusType.NEW.value }}"{% if order.status == order.StatusType.NEW %}
+                           checked {% endif %} required>
                     <label class="form-check-label" for="new_order">
                         <strong>{% trans "Yangi" %}</strong>
                     </label>
@@ -276,8 +276,8 @@
                             type="radio"
                             name="status"
                             id="ready_order"
-                            value="{{ order.StatusType.READY_TO_ORDER }}"
-                            {% if order.status == order.StatusType.READY_TO_ORDER %} checked {% endif %}
+                            value="{{ order.StatusType.READY_TO_DELIVERY.value }}"
+                            {% if order.status == order.StatusType.READY_TO_DELIVERY %} checked {% endif %}
                             required >
                     <label class="form-check-label" for="ready_order">
                         <strong>{% trans "Dastavkaga tayyor" %}</strong>
@@ -294,8 +294,8 @@
                             type="radio"
                             name="status"
                             id="cant_phone_order"
-                            value="{{ order.StatusType.NOT_PICK_UP }}"
-                            {% if order.status == order.StatusType.NOT_PICK_UP %} checked {% endif %}
+                            value="{{ order.StatusType.NOT_PICK_UP_CALL.value }}"
+                            {% if order.status == order.StatusType.NOT_PICK_UP_CALL %} checked {% endif %}
                             required
                     >
                     <label class="form-check-label" for="cant_phone_order">
@@ -311,7 +311,7 @@
                             type="radio"
                             name="status"
                             id="broken_order"
-                            value="{{ order.StatusType.CANCELED }}"
+                            value="{{ order.StatusType.CANCELED.value }}"
                             {% if order.status == order.StatusType.CANCELED %} checked {% endif %}
                             required
                     >
@@ -329,7 +329,7 @@
                             type="radio"
                             name="status"
                             id="archived_order"
-                            value="{{ order.StatusType.ARCHIVED }}"
+                            value="{{ order.StatusType.ARCHIVED.value }}"
                             {% if order.status == order.StatusType.ARCHIVED %} checked {% endif %}
                             required
                     >
@@ -351,11 +351,12 @@
                     <strong>{% trans "Komment" %}:</strong>
                 </label>
                 <textarea type="text"
-                          name="comment_operator"
+                          name="comment"
                           class="form-control"
                           id="comment"
                           rows="3"
                           placeholder="{% trans 'Ushbu buyurtma uchun izoh...' %}"
+
                 ></textarea>
             </div>
         </div>

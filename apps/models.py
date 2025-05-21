@@ -125,7 +125,6 @@ class Product(BaseSlug):
         price = int(self.price)
         return price - price * (self.discount / 100)
 
-
 class WishList(Model):
     user = ForeignKey('apps.User' , CASCADE , related_name="wishlists")
     product = ForeignKey('apps.Product' , CASCADE , related_name="wishlists")
@@ -154,14 +153,15 @@ class Order(Model):
     total = DecimalField(max_digits=9 , decimal_places=0)
     comment = TextField(null=True)
     thread = ForeignKey('apps.Thread' , SET_NULL , related_name='orders' , null=True , blank=True)
+    deliver_time = DateField(null=True , blank=True)
     created_at = DateTimeField(auto_now_add=True)
+    updated_at = DateTimeField(auto_now=True)
 
 
     @property
     def discount_price(self):
-        price = float(self.product.discount_price) - float(self.thread.discount_price)
+        price = float(self.product.discount_price) - (float(self.thread.discount_price) if self.thread else 0)
         return price
-
 
 class Thread(Model):
     class Meta:
@@ -172,8 +172,6 @@ class Thread(Model):
     discount_price = DecimalField(max_digits=9 , decimal_places=0)
     created_at = DateTimeField(auto_now_add=True)
     visit_count = PositiveIntegerField(default=0)
-
-
 
 class AdminSetting(Model):
     deliver_price = DecimalField(max_digits=9 , decimal_places=0 , default=0)

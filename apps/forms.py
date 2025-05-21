@@ -3,7 +3,7 @@ import re
 from django.contrib.auth.hashers import make_password, check_password
 from django.core.exceptions import ValidationError
 from django.forms import Form, ModelForm
-from django.forms.fields import CharField
+from django.forms.fields import CharField, IntegerField
 
 from apps.models import User, Order, AdminSetting, Thread, Product, Payment
 
@@ -72,9 +72,20 @@ class OrderModelForm(ModelForm):
     def save(self, commit = True):
         obj = super().save(commit=False)
         admin_setting  = AdminSetting.objects.first()
-        obj.total = float(admin_setting.deliver_price) + float(obj.product.discount_price) - float(obj.thread.discount_price)
+        obj.total = float(admin_setting.deliver_price) + float(obj.product.discount_price) - (float(obj.thread.discount_price) if obj.thread else 0)
         obj.save()
         return obj
+
+class OrderUpdateModelForm(ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['quantity'].required = False
+        self.fields['deliver_time'].required = False
+    class Meta:
+        model = Order
+        fields = 'quantity' , 'deliver_time' , 'status' , 'comment' , 'district'
+
 
 
 
@@ -110,3 +121,6 @@ class PaymentModelForm(ModelForm):
         if owner.balance < pay_amount:
             raise ValidationError(f"Balance da pul yetarli emas")
         return pay_amount
+
+
+
