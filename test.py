@@ -2,9 +2,14 @@
 # from os import getpid
 #
 # print(getpid())
+import os
+import time
 from dataclasses import dataclass
 
+import django
 from PIL.ImageChops import logical_or
+
+from apps.tasks import add
 
 # tmp = lambda a , b: a  + b
 # print(tmp(1, 2))
@@ -59,3 +64,18 @@ from PIL.ImageChops import logical_or
 # l = []
 # print(id(l))
 # print(l)
+
+# def tmp(a , b):
+#     pass
+#
+# tmp(1,b=2)
+
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'root.settings')
+django.setup()
+start = time.time()
+add.delay(1,2)
+end = time.time()
+print(f"Ish bajarildi ! Tekishirib ko'rishingiz mumkin ! Time: {end-start}")
+
+

@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin
+from parler.admin import TranslatableAdmin
 
 from apps.models import Category, Product, AdminSetting, User, Payment
 
@@ -8,7 +9,7 @@ from apps.models import Category, Product, AdminSetting, User, Payment
 
 
 @admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(TranslatableAdmin):
     pass
 
 @admin.register(Product)

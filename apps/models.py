@@ -6,6 +6,7 @@ from django.db.models import Model, SlugField, CharField, URLField, ImageField, 
 from django.db.models.enums import TextChoices
 from django.db.models.fields import DateTimeField, DateField
 from django.utils.text import slugify
+from parler.models import TranslatableModel, TranslatedFields
 
 
 # Create your models here.
@@ -102,11 +103,13 @@ class User(AbstractUser):
     def wishlist_products(self):
         return self.wishlists.values_list('product_id',flat=True)
 
-class Category(BaseSlug):
+class Category(TranslatableModel):
     icon = URLField()
-
-    def __repr__(self):
-        return self.name
+    translations = TranslatedFields(
+        title=CharField(max_length=200)
+    )
+    def __str__(self):
+        return self.title
 
 class Product(BaseSlug):
     image = ImageField(upload_to='products/')

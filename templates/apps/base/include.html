@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load i18n %}
 <html lang="en-US" dir="ltr" class="chrome osx fontawesome-i2svg-active fontawesome-i2svg-complete">
 <head>
     <style>body {
@@ -633,7 +633,7 @@
                             <ul class="nav collapse show" id="dashboard">
                                 <li class="nav-item">
                                     <a class="nav-link active" href="{% url 'home' %}" aria-expanded="false">
-                                        <div class="d-flex align-items-center"><span class="nav-link-text ps-1">Bosh sahifa</span>
+                                        <div class="d-flex align-items-center"><span class="nav-link-text ps-1">{% trans "Bosh sahifa" %}</span>
                                         </div>
                                     </a>
                                 </li>
@@ -773,6 +773,14 @@
                             </label>
                         </div>
                     </li>
+                    <form action="{% url 'set_language' %}" method="post">
+                        {% csrf_token %}
+                        <select name="language" onchange="this.form.submit()">
+                            <option value="uz" {% if LANGUAGE_CODE == 'uz' %}selected{% endif %}>O'zbek</option>
+                            <option value="ru" {% if LANGUAGE_CODE == 'ru' %}selected{% endif %}>Русский</option>
+                            <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
+                        </select>
+                    </form>
 
 
                     <li class="nav-item dropdown">

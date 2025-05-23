@@ -1,5 +1,7 @@
 multilanguage
+celery+redis : flower , beat
 google auth
-celery : flower , beat
-redis
-docker + django project + server
+docker + django project + postgres + server
+
+crontab
+
