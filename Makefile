@@ -6,7 +6,6 @@ mig:
 fix:
 	python manage.py loaddata categories products districts regions
 
-
 admin:
 	python manage.py createsuperuser
 
